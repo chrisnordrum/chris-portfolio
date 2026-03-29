@@ -9,9 +9,15 @@ body {
     margin: 0 auto;
     max-width: fit-content;
     padding: 1rem;
+    background:
+        radial-gradient(circle at top left, rgba(71, 210, 205, 0.08), transparent 28%),
+        radial-gradient(circle at top right, rgba(239, 45, 145, 0.08), transparent 24%),
+        linear-gradient(180deg, color-mix(in srgb, #eff3f8 92%, white 8%), #eff3f8);
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    color: #101828;
 }
 img {
+    display: block;
     max-width: 100%;
     height: auto;
 }
@@ -145,4 +151,19 @@ main {
         top: 1rem;
         height: fit-content;
     }
+}
+
+@media screen and (prefers-color-scheme: dark) {
+    body {
+        background:
+            radial-gradient(circle at top left, rgba(71, 210, 205, 0.07), transparent 20%),
+            radial-gradient(circle at top right, rgba(239, 45, 145, 0.07), transparent 22%),
+            linear-gradient(180deg, #0f1117, #0b0e14 55%, #10131b);
+        color: #e6edf3;
+    }
+    /* Socials (Only works on some browsers) */
+    .github { content: url("images/icons/GitHub_Invertocat_White.png"); }
+    .linkedin { content: url("images/icons/InBug-White.png"); }
+    .codepen { content: url("images/icons/codepen-logo-white.png"); }
+    .instagram { content: url("images/icons/Instagram_Glyph_White.png"); }
 }
