@@ -7,9 +7,110 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header>
-        <h1><a href="/" class="breadcrumb">Chris Nordrum / </a>livescape-tv</h1>
+    <div class="breadcrumbs">
+        <a href="/" class="link">
+            <img src="https://avatars.githubusercontent.com/u/181436083?s=400&u=259788ade9e5ddf9f461497e332d15714371451f&v=4" alt="Chris Nordrum's GitHub profile picture">
+            <span>chrisnordrum</span>
+        </a>
+        <span>/</span>
+        <span>livescape-tv</span>
+    </div>
+    <main class="case-study">
+        <span class="page">CASESTUDY.md</span>
+        <h1>LiveScape.TV</h1>
+
+        <h2>Overview</h2>
+        <p>LiveScape is a live television and streaming platform designed to replicate and expand on the experience of traditional broadcast TV. It combines linear channel-based viewing with interactive features, allowing users to engage with content and creators in real-time.</p>
+        <p>I joined the project during an active development phase as part of my practicum, where I was responsible for improving core user experiences and contributing to the front-end architecture. Working within an existing codebase, I focused on refining playback logic, optimizing performance, and integrating interactive features to bring the platform closer to a true “live TV” experience.</p>
+
+        <a href="livescape.html">
+            <article class="web">
+                <header>
+                    <div class="browser-dots">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                    <span class="url">//livescape.tv</span>
+                </header>
+                <picture>
+                    <source srcset="images/my-work/livescape-mobile.webp" media="(max-width: 720px)">
+                    <img src="images/my-work/livescape-screenshot.webp" alt="Livescape screenshot">
+                </picture>
+            </article>
+        </a>
+
+        <h2>The Challenge</h2>
+        <p>While the platform had a strong foundation, several key areas were limiting the user experience.</p>
+        <p>Playback was tied to individual programs rather than channels, forcing users to manually restart streams when content changed and breaking the sense of a continuous broadcast.</p>
+        <p>Performance was another concern, particularly around media uploads. The existing sequential upload system was reliable but slow, creating friction for content creators.</p>
+        <p>Interactive mini apps, such as chat and voting, were built on an outdated system that no longer integrated cleanly with the platform, leaving core features non-functional.</p>
+        <p>Additionally, although the platform supported multiple video layers, there were no front-end controls for users to access or switch between them.</p>
+        <p>At the same time, I had no prior experience with modern frameworks, web applications, or React. I needed to quickly learn the stack while contributing to a live codebase and solving real production challenges.</p>
+
+        <h2>The Process</h2>
+
+        <section>
+            <h3>Learning React</h3>
+            <p>To ramp up quickly, I spent my first week focused entirely on learning the core tools used in the project, including React, Vite, React Router, and Tailwind CSS. I worked through official documentation and supplemented it with bits and pieces of LinkedIn Learning courses to build a solid foundation as quickly as possible.</p>
+            <p>I started with smaller, low-risk tasks, such as refactoring basic JavaScript logic and updating the UI, and then quickly worked up to more complex features. Learning and building in parallel let me contribute to the project while continuously improving.</p>
+            <p>To keep up, I continued learning by auditing a Web Application Development course focused on Next.js. While some concepts required adapting to a separate backend architecture, this experience strengthened my understanding of component design, state management, and modern frontend patterns.</p>
+        </section>
+
+        <section>
+            <h3>Video Streaming Flow & Channel Playback</h3>
+            <p>Originally, users had to manually select a program to start playback, and repeat the process every time a new program began. This broke the intended live television experience and made channel surfing feel clunky.</p>
+            <p>The goal was to shift from program-based playback to channel-based playback, allowing users to enter a channel once and remain in a continuous stream.</p>
+            <p>To achieve this, I reworked the connection logic to start at the channel level rather than selecting programs. I also implemented a system to continuously track the active program and dynamically update the current program details in real-time.</p>
+            <img src="images/case-studies/livescape-channel-select.png" alt="Selected channel on LiveScape" width="2928" height="354">
+        </section>
+
+        <section>
+            <h3>Refactoring Upload Architecture</h3>
+            <p>Video uploads were originally handled sequentially, processing one chunk at a time. While this approach was reliable, it was slow and inefficient for larger files.</p>
+            <p>I implemented a concurrent chunk upload system using a queue-based approach, allowing multiple chunks to upload simultaneously while automatically retrying failed chunks. Integrating this required adapting the new logic into the existing workflow and fine-tuning the system to balance speed and stability.</p>
+            <img src="images/case-studies/livescape-upload-media.png" alt="Uploading media on LiveScape" width="1126" height="124">
+        </section>
+
+        <section>
+            <h3>Mini App Integration</h3>
+            <p>Mini apps, such as chat and voting, were hosted on a separate application that had not been maintained for several years and no longer integrated with the current platform.</p>
+            <p>Rebuilding the system from scratch wasn’t feasible within the project timeline, so the challenge became making the old and new technologies work together.</p>
+            <p>I worked through the separate application, resolved integration issues, and established a reliable connection between systems to support real-time interaction. This required adapting outdated logic to function within the modern platform environment.</p>
+            <img src="images/case-studies/livescape-mini-app.png" alt="LiveScape's Chat mini app overlay" width="2000" height="1258">
+        </section>
+
+        <section>
+            <h3>Channel Layer Selection</h3>
+            <p>LiveScape supports multiple stream layers per channel, such as different camera angles or feeds, but there was no intuitive or reliable way for users to switch between them.</p>
+            <p>The goal was to make layer selection feel seamless and responsive without interrupting playback.</p>
+            <p>To achieve this, I implemented dynamic detection of available layers and built UI controls that allow users to switch between streams in real-time. I also updated the streaming logic to ensure smooth transitions and handle cases where certain layers were unavailable.</p>
+            <img src="images/case-studies/livescape-layer-controls.png" alt="Layer controls panel on LiveScape" width="820" height="230">
+        </section>
+
+        <h2>The Solution</h2>
+        <p>I improved the platform by restructuring playback around channels instead of individual programs, optimizing media uploads through a more efficient architecture, restoring real-time interactivity through mini app integration, and introducing seamless layer switching for multi-view content.</p>
+
+        <h2>The Results</h2>
+        <ul>
+            <li>
+                <h3>75%</h3>
+                Manual playback selection reduction after optiimization
+            </li>
+            <li>
+                <h3>41%</h3>
+                Typical video upload time reduction after optimization
+            </li>
+            <li>
+                <h3>0 - 100%</h3>
+                Functionality before and after integrating mini apps
+            </li>
+        </ul>
+    </main>
+    <aside>
+        <h2>About</h2>
         <p>Optimizing a live TV streaming platform for seamless playback, faster uploads, and real-time interaction.</p>
+
         <h2>Contributors</h2>
         <ul class="contributors">
             <li>
@@ -25,105 +126,13 @@
                 <span>Diane Schultze</span>
             </li>
         </ul>
+
         <h2>Languages</h2>
         <ul class="languages">
             <li class="react">React</li>
             <li class="javascript">JavaScript</li>
             <li class="tailwind">Tailwind CSS</li>
         </ul>
-    </header>
-    <main>
-        <article class="case-study">
-            <span>CASESTUDY.md</span>
-
-            <h2>LiveScape.TV</h2>
-            <p>LiveScape is a live television and streaming platform designed to replicate and expand on the experience of traditional broadcast TV. It combines linear channel-based viewing with interactive features, allowing users to engage with content and creators in real-time.</p>
-            <p>I joined the project during an active development phase as part of my practicum, where I was responsible for improving core user experiences and contributing to the front-end architecture. Working within an existing codebase, I focused on refining playback logic, optimizing performance, and integrating interactive features to bring the platform closer to a true “live TV” experience.</p>
-
-            <a href="livescape.html">
-                <article class="web">
-                    <header>
-                        <div class="browser-dots">
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                        </div>
-                        <span class="url">//livescape.tv</span>
-                    </header>
-                    <picture>
-                        <source srcset="images/my-work/livescape-mobile.webp" media="(max-width: 720px)">
-                        <img src="images/my-work/livescape-screenshot.webp" alt="Livescape screenshot">
-                    </picture>
-                </article>
-            </a>
-
-            <h3>The Challenge</h3>
-            <p>While the platform had a strong foundation, several key areas were limiting the user experience.</p>
-            <p>Playback was tied to individual programs rather than channels, forcing users to manually restart streams when content changed and breaking the sense of a continuous broadcast.</p>
-            <p>Performance was another concern, particularly around media uploads. The existing sequential upload system was reliable but slow, creating friction for content creators.</p>
-            <p>Interactive mini apps, such as chat and voting, were built on an outdated system that no longer integrated cleanly with the platform, leaving core features non-functional.</p>
-            <p>Additionally, although the platform supported multiple video layers, there were no front-end controls for users to access or switch between them.</p>
-            <p>At the same time, I had no prior experience with modern frameworks, web applications, or React. I needed to quickly learn the stack while contributing to a live codebase and solving real production challenges.</p>
-
-            <h3>The Process</h3>
-
-            <section>
-                <h4>Learning React</h4>
-                <p>To ramp up quickly, I spent my first week focused entirely on learning the core tools used in the project, including React, Vite, React Router, and Tailwind CSS. I worked through official documentation and supplemented it with bits and pieces of LinkedIn Learning courses to build a solid foundation as quickly as possible.</p>
-                <p>I started with smaller, low-risk tasks, such as refactoring basic JavaScript logic and updating the UI, and then quickly worked up to more complex features. Learning and building in parallel let me contribute to the project while continuously improving.</p>
-                <p>To keep up, I continued learning by auditing a Web Application Development course focused on Next.js. While some concepts required adapting to a separate backend architecture, this experience strengthened my understanding of component design, state management, and modern frontend patterns.</p>
-            </section>
-
-            <section>
-                <h4>Video Streaming Flow & Channel Playback</h4>
-                <p>Originally, users had to manually select a program to start playback, and repeat the process every time a new program began. This broke the intended live television experience and made channel surfing feel clunky.</p>
-                <p>The goal was to shift from program-based playback to channel-based playback, allowing users to enter a channel once and remain in a continuous stream.</p>
-                <p>To achieve this, I reworked the connection logic to start at the channel level rather than selecting programs. I also implemented a system to continuously track the active program and dynamically update the current program details in real-time.</p>
-                <img src="images/case-studies/livescape-channel-select.png" alt="Selected channel on LiveScape" width="2928" height="354">
-            </section>
-
-            <section>
-                <h4>Refactoring Upload Architecture</h4>
-                <p>Video uploads were originally handled sequentially, processing one chunk at a time. While this approach was reliable, it was slow and inefficient for larger files.</p>
-                <p>I implemented a concurrent chunk upload system using a queue-based approach, allowing multiple chunks to upload simultaneously while automatically retrying failed chunks. Integrating this required adapting the new logic into the existing workflow and fine-tuning the system to balance speed and stability.</p>
-                <img src="images/case-studies/livescape-upload-media.png" alt="Uploading media on LiveScape" width="1126" height="124">
-            </section>
-
-            <section>
-                <h4>Mini App Integration</h4>
-                <p>Mini apps, such as chat and voting, were hosted on a separate application that had not been maintained for several years and no longer integrated with the current platform.</p>
-                <p>Rebuilding the system from scratch wasn’t feasible within the project timeline, so the challenge became making the old and new technologies work together.</p>
-                <p>I worked through the separate application, resolved integration issues, and established a reliable connection between systems to support real-time interaction. This required adapting outdated logic to function within the modern platform environment.</p>
-                <img src="images/case-studies/livescape-mini-app.png" alt="LiveScape's Chat mini app overlay" width="2000" height="1258">
-            </section>
-
-            <section>
-                <h4>Channel Layer Selection</h4>
-                <p>LiveScape supports multiple stream layers per channel, such as different camera angles or feeds, but there was no intuitive or reliable way for users to switch between them.</p>
-                <p>The goal was to make layer selection feel seamless and responsive without interrupting playback.</p>
-                <p>To achieve this, I implemented dynamic detection of available layers and built UI controls that allow users to switch between streams in real-time. I also updated the streaming logic to ensure smooth transitions and handle cases where certain layers were unavailable.</p>
-                <img src="images/case-studies/livescape-layer-controls.png" alt="Layer controls panel on LiveScape" width="820" height="230">
-            </section>
-
-            <h3>The Solution</h3>
-            <p>I improved the platform by restructuring playback around channels instead of individual programs, optimizing media uploads through a more efficient architecture, restoring real-time interactivity through mini app integration, and introducing seamless layer switching for multi-view content.</p>
-
-            <h3>The Results</h3>
-            <ul>
-                <li>
-                    <h4>75%</h4>
-                    Manual playback selection reduction after optiimization
-                </li>
-                <li>
-                    <h4>41%</h4>
-                    Typical video upload time reduction after optimization
-                </li>
-                <li>
-                    <h4>0 - 100%</h4>
-                    Functionality before and after integrating mini apps
-                </li>
-            </ul>
-        </article>
-    </main>
+    </aside>
 </body>
 </html>
