@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chris Nordrum | Wild Rose Foundry</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="breadcrumbs">
+        <a href="/" class="link">
+            <img src="https://avatars.githubusercontent.com/u/181436083?s=400&u=259788ade9e5ddf9f461497e332d15714371451f&v=4" alt="">
+            <span>chrisnordrum</span>
+        </a>
+        <span>/</span>
+        <span>wild-rose-foundry</span>
+    </div>
+    <main class="case-study">
+        <span class="page">CASESTUDY.md</span>
+        <h1>Wild Rose Foundry</h1>
+
+        <h2>Overview</h2>
+        <p>Wild Rose Foundry is a fictional local Alberta artisan collective that brings together independent makers in a community-driven marketplace. As part of a digital initiative, the goal of this project was to design and develop a <strong>full-stack prototype</strong> that allows users to browse products across vendors and place orders for pickup during market weekends.</p>
+
+        <a href="#" class="window">
+            <div class="title-bar">
+                <div class="browser-dots">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                <span class="url">wild-rose-foundry</span>
+            </div>
+            <picture>
+                <img src="images/my-work/wildrose-foundry-screenshot.webp" alt="">
+            </picture>
+        </a>
+
+        <h2>The Challenge</h2>
+        <p>The challenge was to create a simple, structured digital platform that allowed users to browse across vendors and place orders, while still reflecting the brand's handcrafted, local identity. From a development standpoint, this meant designing a database that could support multiple vendors, products, and variations, while also building a dynamic website that could present that data in a simple and intuitive way.</p>
+
+        <h2>The Process</h2>
+        <h3>Designing the Database</h3>
+        <p>I started by designing a relational database to support vendors, products, categories, variants, and orders. Creating an ERD early helped define relationships and avoid redundancy, especially when handling product variants and cross-vendor categories.</p>
+        <figure>
+            <img src="images/case-studies/wildrose-erd.png" alt="Entity relationship diagram for Wild Rose Foundry, made with QuickDBD" width="906" height="594">
+            <figcaption>Entity Relationship Diagram made with <a href="https://www.quickdatabasediagrams.com/" class="link" target="_blank">QuickDBD</a></figcaption>
+        </figure>
+
+        <h3>Building the Website</h3>
+        <p>With the database in place, I built the website using PHP, HTML, and CSS, focusing on making it feel dynamic while keeping the code clean and maintainable. Product listings, categories, and individual pages are generated through database queries, allowing templates to be reused across the site.</p>
+        <p>I used PHP includes for reusable components to maintain consistency, with session-based logic handling product orders. Alongside development, I spent time simplifying layouts, spacing, and hierarchy because making something feel clean and easy to use often takes more effort than adding more features.</p>
+        <figure>
+            <div class="comparison">
+                <div class="comparison-after">
+                    <div class="comparison-before"></div>
+                </div>
+                <input type="range" id="slider" min="0" max="100" value="50">
+            </div>
+            <figcaption>Wireframe → Website - Comparison Slider</figcaption>
+        </figure>
+
+        <h3>Enhancing the User Experience</h3>
+        <p>To improve engagement and interactivity, I implemented a few key JavaScript features.</p>
+        <ul>
+            <li>
+                <strong>Featured Product Carousel</strong>
+                <p>The featured product carousel is dynamically populated using a MySQL query, with scrollability handled through CSS, and button-based navigation to change the carousel position with JavaScript.</p>
+            </li>
+            <li>
+                <strong>Christmas Countdown Banner</strong>
+                <p>The Christmas countdown banner uses the Temporal API to count down to Christmas Day, updating automatically at midnight based on the user’s local time.</p>
+                <div class="code">
+                    <span class="code-lang">JS</span>
+<pre><span class="declarator">const</span> <span class="function">daysUntilChristmas</span> <span class="operator">=</span> <span class="integer">()</span> <span class="declarator">=></span> <span class="integer">{</span>
+  <span class="declarator">const</span> <span class="const">today</span> <span class="operator">=</span> <span class="const">Temporal</span>.<span class="const">Now</span>.<span class="function">plainDateISO</span><span class="declarator">()</span>;
+  <span class="declarator">const</span> <span class="const">christmas</span> <span class="operator">=</span> <span class="declarator">new</span> <span class="const">Temporal</span>.<span class="function">PlainDate</span><span class="declarator">(</span><span class="const">today</span>.<span class="var">year</span>, <span class="integer">12</span>, <span class="integer">25</span><span class="declarator">)</span>;
+
+  <span class="comment">// Calculate Days Until Christmas</span>
+  <span class="declarator">const</span> <span class="const">christmasPast</span> <span class="operator">=</span> <span class="const">today</span>.<span class="function">until</span><span class="declarator">(</span><span class="const">christmas</span>, <span class="operator">{</span> <span class="var">largestUnit</span>: <span class="string">'days'</span> <span class="operator">}</span><span class="declarator">)</span>;
+
+  <span class="comment">// If Christmas already passed this year (Calculation provided negative days), then add 1 year</span>
+  <span class="declarator">if (</span><span class="const">christmasPast</span>.<span class="var">days</span> <span class="operator"><</span> <span class="integer">0</span> <span class="declarator">) {
+    const</span> <span class="const">christmasFuture</span> <span class="operator">=</span> <span class="declarator">new</span> <span class="const">Temporal</span>.<span class="function">PlainDate</span><span class="operator">(</span><span class="const">today</span>.<span class="var">year</span> <span class="operator">+</span> <span class="integer">1</span>, <span class="const">christmas</span>.<span class="var">month</span>, <span class="const">christmas</span>.<span class="var">day</span><span class="operator">)</span>;
+    <span class="declarator">var</span> <span class="var">christmasCountdown</span> <span class="operator">=</span> <span class="const">today</span>.<span class="function">until</span><span class="operator">(</span><span class="const">christmasFuture</span>, <span class="integer">{</span> <span class="var">largestUnit</span>: <span class="string">'days'</span> <span class="integer">}</span><span class="operator">)</span>;
+  <span class="declarator">} else {
+    var</span> <span class="var">christmasCountdown</span> <span class="operator">=</span> <span class="const">christmasPast</span>;
+  <span class="declarator">}</span>
+
+  <span class="comment">// Update # in HTML</span>
+  <span class="const">christmasBanner</span>.<span class="var">textContent</span> <span class="operator">=</span> <span class="string">`Only</span> <span class="declarator">${</span><span class="var">christmasCountdown</span>.<span class="var">days</span><span class="declarator">}</span> <span class="string">days until Christmas! ❄️`</span>;
+<span class="integer">}</span></pre>
+                </div>
+            </li>
+            <li>
+                <strong>Product Variation Thumbnails</strong>
+                <p>Product variant thumbnails allow users to toggle between variations while dynamically updating product images through thumbnail selection.</p>
+                <video autoplay controls loop width="2172" height="1488">
+                    <source src="videos/wildrose-thumbnails.mov">
+                    Sorry, your browser doesn't support embedded videos.
+                </video>
+            </li>
+        </ul>
+
+        <h2>The Solution</h2>
+        <p>The final result is a dynamic prototype that balances a structured database with a clean front-end experience. Users can browse products across vendors, view detailed product pages, and build an order for pickup, all within a system designed to scale as the website grows.</p>
+        <ul class="results">
+            <li>
+                <strong>100%</strong>
+                Built from scratch
+            </li>
+            <li>
+                <strong>7</strong>
+                Relational tables
+            </li>
+            <li>
+                <strong>✓</strong>
+                Fully responsive
+            </li>
+        </ul>
+
+    </main>
+    <aside>
+        <h2>About</h2>
+        <p>E-commerce website designed and developed for school project.</p>
+
+        <h2>Releases</h2>
+        <ul class="releases">
+            <li><a href="" class="link" target="_blank">/wild-rose-foundry</a></li>
+            <li><a href="https://github.com/chrisnordrum/wild-rose-foundry" class="link" target="_blank">github.com/wild-rose-foundry</a></li>
+        </ul>
+
+        <h2>Languages</h2>
+        <ul class="languages">
+            <li class="php">PHP</li>
+            <li class="mysql">MySQL</li>
+            <li class="css">CSS</li>
+            <li class="javascript">JavaScript</li>
+            <li class="html">HTML</li>
+        </ul>
+    </aside>
+    <script src="script.js"></script>
+</body>
+</html>
