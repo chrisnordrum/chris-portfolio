@@ -30,6 +30,10 @@
         --accent-color: #58a6ff;
         --border-color: rgba(255, 255, 255, 0.08);
         --dark-border-color: rgba(255, 255, 255, 0.15);
+        --badge-web-bg-color: #1a3a5c;
+        --badge-web-text-color: #79b8ff;
+        --badge-post-bg-color: #3a2f10;
+        --badge-post-text-color: #dcdcaa;
         --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
         --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.4);
         --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.5);
