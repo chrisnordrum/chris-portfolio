@@ -1,3 +1,14 @@
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translate(0);
+    }
+}
+
 :root {
     --bg: #f5f5f7;
     --bg-color: #f5f5f7;
@@ -10,8 +21,8 @@
     --dark-border-color: rgba(0, 0, 0, 0.14);
     --badge-web-bg-color: #dbeafe;
     --badge-web-text-color: #1d4ed8;
-    --badge-post-bg-color: #fef9c3;
-    --badge-post-text-color: #854d0e;
+    --badge-post-bg-color: #ffedd5;
+    --badge-post-text-color: #ea580c;
     --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
     --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.08);
     --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.12);
@@ -32,8 +43,8 @@
         --dark-border-color: rgba(255, 255, 255, 0.15);
         --badge-web-bg-color: #1a3a5c;
         --badge-web-text-color: #79b8ff;
-        --badge-post-bg-color: #3a2f10;
-        --badge-post-text-color: #dcdcaa;
+        --badge-post-bg-color: #5b2d12;
+        --badge-post-text-color: #fb923c;
         --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
         --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.4);
         --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.5);
@@ -47,6 +58,7 @@ html { scroll-behavior: smooth; }
 
 body {
     display: grid;
+    animation: fadeIn 0.7s ease;
     margin: 0 auto;
     max-width: fit-content;
     padding: 1rem;
