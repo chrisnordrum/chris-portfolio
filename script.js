@@ -2,6 +2,8 @@ const timeline = document.querySelector(".timeline");
 const sections = document.querySelectorAll(".timeline section");
 
 function updateTimeline() {
+    if (!timeline) return;
+
     const timelineRect = timeline.getBoundingClientRect();
     const windowHeight = window.innerHeight;
 
@@ -24,7 +26,7 @@ function updateTimeline() {
             (tagsRect.top - timelineRect.top) +
             (tags.offsetHeight / 2);
 
-        if (linePosition >= dotPosition + 28) {
+        if (linePosition >= dotPosition + 40) {
             section.classList.add("in-view");
         } else {
             section.classList.remove("in-view");
@@ -41,7 +43,7 @@ const divisor = document.querySelector(".comparison-before");
 const slider = document.querySelector("#slider");
 
 function moveDivisor() {
-    divisor.style.width = slider.value + "%";
+    divisor.style.width = `${slider.value}%`;
 }
 
 if (slider) slider.addEventListener("input", moveDivisor);

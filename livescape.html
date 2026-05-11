@@ -6,24 +6,24 @@
     <title>Chris Nordrum | LiveScape.TV</title>
     <link rel="stylesheet" href="styles.css">
 </head>
-<body>
-    <div class="breadcrumbs">
+<body class="case-study-layout">
+    <nav class="breadcrumbs">
         <a href="./" class="link">
             <img src="https://avatars.githubusercontent.com/u/181436083?s=400&u=259788ade9e5ddf9f461497e332d15714371451f&v=4" alt="Chris Nordrum smiling in a light blue button-up shirt">
             <span>chrisnordrum</span>
         </a>
         <span>/</span>
         <span>livescape-tv</span>
-    </div>
+    </nav>
     <main class="case-study">
-        <span class="page">CASESTUDY.md</span>
+        <span class="case-study-header">CASESTUDY.md</span>
         <h1>LiveScape.TV</h1>
 
         <h2>Overview</h2>
         <p>LiveScape is a live television and streaming platform designed to replicate and expand on the experience of traditional broadcast TV. It combines linear channel-based viewing with interactive features, allowing users to engage with content and creators in real-time.</p>
         <p>I joined the project during an active development phase as part of my practicum, where I was responsible for improving core user experiences and contributing to the front-end architecture. Working within an existing codebase, I focused on refining playback logic, optimizing performance, and integrating interactive features to bring the platform closer to a true “live TV” experience.</p>
 
-        <div class="web">
+        <div class="browser-window">
             <div class="title-bar">
                 <div class="browser-dots">
                     <span></span>
@@ -60,14 +60,14 @@
             <p>Originally, users had to manually select a program to start playback, and repeat the process every time a new program began. This broke the intended live television experience and made channel surfing feel clunky.</p>
             <p>The goal was to shift from program-based playback to channel-based playback, allowing users to enter a channel once and remain in a continuous stream.</p>
             <p>To achieve this, I reworked the connection logic to start at the channel level rather than selecting programs. I also implemented a system to continuously track the active program and dynamically update the current program details in real-time.</p>
-            <img src="images/case-studies/livescape-channel-select.png" alt="Selected channel on LiveScape" width="2928" height="354">
+            <img src="images/case-studies/livescape-channel-select.png" alt="Selected channel on LiveScape" width="2928" height="354" loading="lazy">
         </section>
 
         <section>
             <h3>Refactoring Upload Architecture</h3>
             <p>Video uploads were originally handled sequentially, processing one chunk at a time. While this approach was reliable, it was slow and inefficient for larger files.</p>
             <p>I implemented a concurrent chunk upload system using a queue-based approach, allowing multiple chunks to upload simultaneously while automatically retrying failed chunks. Integrating this required adapting the new logic into the existing workflow and fine-tuning the system to balance speed and stability.</p>
-            <img src="images/case-studies/livescape-upload-media.png" alt="Uploading media on LiveScape" width="1126" height="124">
+            <img src="images/case-studies/livescape-upload-media.png" alt="Uploading media on LiveScape" width="1126" height="124" loading="lazy">
         </section>
 
         <section>
@@ -75,7 +75,7 @@
             <p>Mini apps, such as chat and voting, were hosted on a separate application that had not been maintained for several years and no longer integrated with the current platform.</p>
             <p>Rebuilding the system from scratch wasn’t feasible within the project timeline, so the challenge became making the old and new technologies work together.</p>
             <p>I worked through the separate application, resolved integration issues, and established a reliable connection between systems to support real-time interaction. This required adapting outdated logic to function within the modern platform environment.</p>
-            <img src="images/case-studies/livescape-mini-app.png" alt="LiveScape's Chat mini app overlay" width="2000" height="1258">
+            <img src="images/case-studies/livescape-mini-app.png" alt="LiveScape's Chat mini app overlay" width="2000" height="1258" loading="lazy">
         </section>
 
         <section>
@@ -83,7 +83,7 @@
             <p>LiveScape supports multiple stream layers per channel, such as different camera angles or feeds, but there was no intuitive or reliable way for users to switch between them.</p>
             <p>The goal was to make layer selection feel seamless and responsive without interrupting playback.</p>
             <p>To achieve this, I implemented dynamic detection of available layers and built UI controls that allow users to switch between streams in real-time. I also updated the streaming logic to ensure smooth transitions and handle cases where certain layers were unavailable.</p>
-            <img src="images/case-studies/livescape-layer-controls.png" alt="Layer controls panel on LiveScape" width="820" height="230">
+            <img src="images/case-studies/livescape-layer-controls.png" alt="Layer controls panel on LiveScape" width="820" height="230" loading="lazy">
         </section>
 
         <h2>The Solution</h2>
@@ -91,7 +91,7 @@
         <ul class="results">
             <li>
                 <strong>75%</strong>
-                Manual playback selection reduction after optiimization
+                Manual playback selection reduction after optimization
             </li>
             <li>
                 <strong>41%</strong>

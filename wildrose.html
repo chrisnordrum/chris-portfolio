@@ -6,23 +6,23 @@
     <title>Chris Nordrum | Wild Rose Foundry</title>
     <link rel="stylesheet" href="styles.css">
 </head>
-<body>
-    <div class="breadcrumbs">
+<body class="case-study-layout">
+    <nav class="breadcrumbs">
         <a href="./" class="link">
             <img src="https://avatars.githubusercontent.com/u/181436083?s=400&u=259788ade9e5ddf9f461497e332d15714371451f&v=4" alt="Chris Nordrum smiling in a light blue button-up shirt">
             <span>chrisnordrum</span>
         </a>
         <span>/</span>
         <span>wild-rose-foundry</span>
-    </div>
+    </nav>
     <main class="case-study">
-        <span class="page">CASESTUDY.md</span>
+        <span class="case-study-header">CASESTUDY.md</span>
         <h1>Wild Rose Foundry</h1>
 
         <h2>Overview</h2>
         <p>Wild Rose Foundry is a fictional local Alberta artisan collective that brings together independent makers in a community-driven marketplace. As part of a digital initiative, the goal of this project was to design and develop a <strong>full-stack prototype</strong> that allows users to browse products across vendors and place orders for pickup during market weekends.</p>
 
-        <a href="https://dev.interactivedesign.ca/~cnordrum/cprg310/final/" target="_blank" class="web">
+        <a href="https://dev.interactivedesign.ca/~cnordrum/cprg310/final/" target="_blank" rel="noopener noreferrer" class="browser-window">
             <div class="title-bar">
                 <div class="browser-dots">
                     <span></span>
@@ -44,8 +44,8 @@
         <h3>Designing the Database</h3>
         <p>I started by designing a relational database to support vendors, products, categories, variants, and orders. Creating an ERD early helped define relationships and avoid redundancy, especially when handling product variants and cross-vendor categories.</p>
         <figure>
-            <img src="images/case-studies/wildrose-erd.png" alt="Entity relationship diagram for Wild Rose Foundry, made with QuickDBD" width="906" height="594">
-            <figcaption>Entity Relationship Diagram made with <a href="https://www.quickdatabasediagrams.com/" class="link" target="_blank">QuickDBD</a></figcaption>
+            <img src="images/case-studies/wildrose-erd.png" alt="Entity relationship diagram for Wild Rose Foundry, made with QuickDBD" width="906" height="594" loading="lazy">
+            <figcaption>Entity Relationship Diagram made with <a href="https://www.quickdatabasediagrams.com/" class="link" target="_blank" rel="noopener noreferrer">QuickDBD</a></figcaption>
         </figure>
 
         <h3>Building the Website</h3>
@@ -71,7 +71,7 @@
             <li>
                 <strong>Christmas Countdown Banner</strong>
                 <p>The Christmas countdown banner uses the Temporal API to count down to Christmas Day, updating automatically at midnight based on the user’s local time.</p>
-                <div class="code">
+                <div class="code-block">
                     <span class="code-lang">JS</span>
 <pre><span class="declarator">const</span> <span class="function">daysUntilChristmas</span> <span class="operator">=</span> <span class="integer">()</span> <span class="declarator">=></span> <span class="integer">{</span>
   <span class="declarator">const</span> <span class="const">today</span> <span class="operator">=</span> <span class="const">Temporal</span>.<span class="const">Now</span>.<span class="function">plainDateISO</span><span class="declarator">()</span>;
@@ -81,7 +81,7 @@
   <span class="declarator">const</span> <span class="const">christmasPast</span> <span class="operator">=</span> <span class="const">today</span>.<span class="function">until</span><span class="declarator">(</span><span class="const">christmas</span>, <span class="operator">{</span> <span class="var">largestUnit</span>: <span class="string">'days'</span> <span class="operator">}</span><span class="declarator">)</span>;
 
   <span class="comment">// If Christmas already passed this year (Calculation provided negative days), then add 1 year</span>
-  <span class="declarator">if (</span><span class="const">christmasPast</span>.<span class="var">days</span> <span class="operator"><</span> <span class="integer">0</span> <span class="declarator">) {
+  <span class="declarator">if (</span><span class="const">christmasPast</span>.<span class="var">days</span> <span class="operator">&lt;</span> <span class="integer">0</span> <span class="declarator">) {
     const</span> <span class="const">christmasFuture</span> <span class="operator">=</span> <span class="declarator">new</span> <span class="const">Temporal</span>.<span class="function">PlainDate</span><span class="operator">(</span><span class="const">today</span>.<span class="var">year</span> <span class="operator">+</span> <span class="integer">1</span>, <span class="const">christmas</span>.<span class="var">month</span>, <span class="const">christmas</span>.<span class="var">day</span><span class="operator">)</span>;
     <span class="declarator">var</span> <span class="var">christmasCountdown</span> <span class="operator">=</span> <span class="const">today</span>.<span class="function">until</span><span class="operator">(</span><span class="const">christmasFuture</span>, <span class="integer">{</span> <span class="var">largestUnit</span>: <span class="string">'days'</span> <span class="integer">}</span><span class="operator">)</span>;
   <span class="declarator">} else {
@@ -96,7 +96,7 @@
             <li>
                 <strong>Product Variation Thumbnails</strong>
                 <p>Product variant thumbnails allow users to toggle between variations while dynamically updating product images through thumbnail selection.</p>
-                <video autoplay controls loop width="2172" height="1488">
+                <video autoplay controls loop playsinline width="2172" height="1488">
                     <source src="videos/wildrose-thumbnails.mov">
                     Sorry, your browser doesn't support embedded videos.
                 </video>
@@ -127,8 +127,8 @@
 
         <h2>Releases</h2>
         <ul class="releases">
-            <li><a href="https://dev.interactivedesign.ca/~cnordrum/cprg310/final/" class="link" target="_blank">/wild-rose-foundry</a></li>
-            <li><a href="https://github.com/chrisnordrum/wild-rose-foundry" class="link" target="_blank">github.com/wild-rose-foundry</a></li>
+            <li><a href="https://dev.interactivedesign.ca/~cnordrum/cprg310/final/" class="link" target="_blank" rel="noopener noreferrer">/wild-rose-foundry</a></li>
+            <li><a href="https://github.com/chrisnordrum/wild-rose-foundry" class="link" target="_blank" rel="noopener noreferrer">github.com/wild-rose-foundry</a></li>
         </ul>
 
         <h2>Languages</h2>
