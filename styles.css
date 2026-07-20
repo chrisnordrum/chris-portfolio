@@ -156,6 +156,10 @@ header > p {
     line-height: 1.65;
 }
 
+.skills {
+    margin-top: 0.75rem;
+}
+
 .contact-links {
     display: flex;
     flex-wrap: wrap;
@@ -822,6 +826,7 @@ aside p {
 .mysql::before      { background-color: #01758F; }
 .react::before      { background-color: #0a7ea5; }
 .tailwind::before   { background-color: #00bfff; }
+.node::before       { background-color: #5fa04e; }
 
 /* || Media Queries */
 
