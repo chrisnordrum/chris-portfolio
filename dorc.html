@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chris Nordrum | DORC</title>
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="case-study-layout">
+    <nav class="breadcrumbs">
+        <a href="./" class="link">
+            <img src="https://avatars.githubusercontent.com/u/181436083?s=400&u=259788ade9e5ddf9f461497e332d15714371451f&v=4" alt="Chris Nordrum smiling in a light blue button-up shirt">
+            <span>chrisnordrum</span>
+        </a>
+        <span>/</span>
+        <span>dorc-app</span>
+    </nav>
+    <main class="case-study">
+        <span class="case-study-header">CASESTUDY.md</span>
+        <h1>DORC</h1>
+
+        <h2>Overview</h2>
+        <p>DORC is a MERN-stack productivity app that turns habit-building into an RPG-style game. It was built by a four-person team for our web security course. The name is just our first initials: <span class="initial">D</span>iane, <span class="initial">O</span>wen, <span class="initial">R</span>adzil, and <span class="initial">C</span>hris.</p>
+        <p>My work covered the server setup and HTTPS, security headers, the JWT token system, security-aware caching, dependency automation, and threat-modelling the whole thing before testing it like an attacker.</p>
+
+        <blockquote>Fair warning: the app itself has no features, but it is very secure!</blockquote>
+
+        <a href="https://dorc-app.vercel.app" target="_blank" rel="noopener noreferrer" class="browser-window">
+            <div class="title-bar">
+                <div class="browser-dots">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                <span class="url">//dorc-app.vercel.app</span>
+            </div>
+            <picture>
+                <source srcset="images/my-work/dorc-mobile.webp" media="(max-width: 720px)">
+                <img src="images/my-work/dorc-screenshot.webp" alt="DORC screenshot">
+            </picture>
+        </a>
+
+        <h2>The Challenge</h2>
+        <p>The project wasn't to ship features; it was to defend a realistic app. That meant treating a small MERN build the way you'd treat something in production: work out how an attacker would actually go after it, then build and verify the protections that hold up.</p>
+        <p>A default MERN setup quietly gets a lot of this wrong: tokens end up somewhere cross-site scripting can reach them, servers ship without protective headers, sensitive responses get cached, and dependencies drift out of date. My job was to close those gaps on a student timeline, while coordinating with teammates working in the same codebase.</p>
+
+        <h2>The Process</h2>
+
+        <section>
+            <h3>A Secure Foundation</h3>
+            <p>I scaffolded the MERN project and its setup process, then started with the server itself. For local development, I ran everything over HTTPS using a self-signed OpenSSL certificate; in production, the hosting platform terminates TLS at the edge.</p>
+
+            <div class="ascii-block">
+<pre>React
+↓ ↑
+Express API
+↓ ↑
+MongoDB</pre>
+            </div>
+
+            <p>On top of that, I used Helmet to set the app's security headers: a Content-Security-Policy that only allows resources from the app's own origin, <code>frame-ancestors: 'none'</code> (with a legacy <code>X-Frame-Options: deny</code> fallback) to block clickjacking, and HSTS to force HTTPS for a year. Locking fonts and scripts to <code>'self'</code> keeps the browser from loading anything the app didn't ship.</p>
+        </section>
+
+        <section>
+            <h3>Authentication &amp; Access Control</h3>
+            <p>I built authentication around a two-token model. The access token is short-lived (10 minutes) and stored in React state rather than in storage, so it isn't sitting somewhere XSS can read. The refresh token is long-lived (24 hours) and stored in an <code>httpOnly</code>, <code>secure</code>, <code>sameSite: strict</code> cookie, making it inaccessible to JavaScript.</p>
+            <p>A custom <code>useAuthFetch</code> hook ties the flow together: when a request returns <code>401</code>, it silently asks the server for a new access token, retries once, and only logs the user out if the refresh itself fails. On the client I also gated protected pages behind a <code>ProtectedRoute</code> component; the admin dashboard is hidden and blocked from anyone without the admin role, backed by role checks on the server so the frontend can't be bypassed.</p>
+            <div class="code-block">
+                <span class="code-lang">JS</span>
+<pre>export function useAuthFetch() {
+  const { token, refresh, logout } = useAuth();
+
+  const authFetch = async (url, options = {}) => {
+    let res = await fetch(url, {
+      ...options,
+      credentials: "include",
+      headers: { ...options.headers, token },
+    });
+
+    // Access token expired — refresh once, then retry
+    if (res.status === 401) {
+      try {
+        const newToken = await refresh();
+        res = await fetch(url, {
+          ...options,
+          credentials: "include",
+          headers: { ...options.headers, token: newToken },
+        });
+      } catch {
+        await logout();
+        throw new Error("Session expired");
+      }
+    }
+
+    return res;
+  };
+
+  return authFetch;
+}</pre>
+            </div>
+        </section>
+
+        <section>
+            <h3>Caching With Security in Mind</h3>
+            <p>Caching is usually framed as a performance concern, but here it was also a security decision. I set cache headers per endpoint based on what the data actually was: static badge images cache for a month, while anything sensitive or user-specific, like user records, quests, and daily quotes, is never cached.</p>
+            <p>The single-page-app fallback and the 500 error handler are both set to <code>no-cache</code>, so users always receive the latest build and transient server errors can't be stored and replayed.</p>
+        </section>
+
+        <section>
+            <h3>Threat Modeling &amp; Testing</h3>
+            <p>Before hardening anything further, I mapped the app as a Data Flow Diagram and ran it through the STRIDE framework to prioritize risk instead of guessing. That pushed authentication, role-based access, and information disclosure to the top, and confirmed that lower-impact threats like denial-of-service could wait at this scale.</p>
+
+            <figure>
+                <img src="images/case-studies/dorc-dfd.png" alt="Data flow diagram for DORC App, made with Figma" width="1234" height="1072" loading="lazy">
+                <figcaption>Data Flow Diagram made with <a href="https://www.figma.com/" class="link" target="_blank" rel="noopener noreferrer">Figma</a></figcaption>
+            </figure>
+            
+            <p>From there, I tested like an attacker: manual probing with Postman and malicious inputs, then automated scanning with OWASP ZAP, which I ran inside a Docker container to keep the scan isolated. ZAP surfaced two Content-Security-Policy weaknesses in the <code>style-src</code> directive: an overly broad source and <code>'unsafe-inline'</code>. I tightened both to <code>'self'</code>, moved styling out of inline CSS, and re-scanned to confirm the warnings were gone without breaking the UI.</p>
+        </section>
+
+        <section>
+            <h3>Dependencies &amp; Deployment</h3>
+            <p>To keep the project from rotting, I set up a GitHub Actions workflow that runs every Monday: it installs with <code>npm ci</code>, audits both the client and server for vulnerabilities, updates dependencies, and posts a summary for the team to review rather than auto-merging blind changes.</p>
+            <p>Finally, I handled the production changes and deployed the React front-end to Vercel and the Express API to Render so the whole thing is live and publicly accessible for anyone who wants to poke at it.</p>
+        </section>
+
+        <h2>The Solution</h2>
+        <p>The result is a small app with a security posture well beyond a typical class project: HTTPS with hardened headers, a JWT auth system built around short-lived tokens and an httpOnly refresh cookie, security-aware caching, a threat model backed by OWASP ZAP testing, and automated dependency checks. The whole thing is deployed and publicly accessible.</p>
+        <ul class="results">
+            <li>
+                <strong>10 min</strong>
+                Access-token lifetime, auto-refreshed via httpOnly cookie
+            </li>
+            <li>
+                <strong>STRIDE</strong>
+                Threat-modeled, then scanned with OWASP ZAP
+            </li>
+            <li>
+                <strong>Weekly</strong>
+                Automated dependency audits in CI
+            </li>
+        </ul>
+    </main>
+    <aside>
+        <h2>About</h2>
+        <p>Security and infrastructure lead on a team-built, RPG-style productivity app — HTTPS, headers, JWT auth, caching, and security testing.</p>
+
+        <h2>Releases</h2>
+        <ul class="releases">
+            <li><a href="https://dorc-app.vercel.app" class="link" target="_blank" rel="noopener noreferrer">dorc-app.vercel.app</a></li>
+            <li><a href="https://github.com/chrisnordrum/dorc-app" class="link" target="_blank" rel="noopener noreferrer">github.com/dorc-app</a></li>
+            <li><a href="https://dorc-app.onrender.com/api-docs" class="link" target="_blank" rel="noopener noreferrer">API docs (Swagger)</a></li>
+        </ul>
+
+        <h2>Contributors</h2>
+        <ul class="contributors">
+            <li>
+                <img src="https://github.com/DianeSchultze.png" alt="Diane Schultze's GitHub profile image">
+                <span>Diane Schultze</span>
+            </li>
+            <li>
+                <img src="https://github.com/owen7460.png" alt="Owen Ouyang's GitHub profile image">
+                <span>Owen Ouyang</span>
+            </li>
+            <li>
+                <img src="https://github.com/CanadaPlayz48.png" alt="Radzil Bunag's GitHub profile image">
+                <span>Radzil Bunag</span>
+            </li>
+            <li>
+                <img src="https://github.com/chrisnordrum.png" alt="Chris Nordrum's GitHub profile image">
+                <span>Chris Nordrum</span>
+            </li>
+        </ul>
+
+        <h2>Languages</h2>
+        <ul class="languages">
+            <li class="react">React</li>
+            <li class="node">Node.js</li>
+            <li class="express">Express</li>
+            <li class="mongodb">MongoDB</li>
+            <li class="javascript">JavaScript</li>
+        </ul>
+    </aside>
+</body>
+</html>

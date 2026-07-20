@@ -640,6 +640,13 @@ header > p {
     color: var(--muted-text-color);
 }
 
+.case-study blockquote {
+    margin: 1.5rem 0;
+    border-left: 3px solid var(--accent-color);
+    padding: 0.25rem 0 0.25rem 1rem;
+    color: var(--secondary-text-color);
+}
+
 .results {
     display: flex;
     flex-wrap: wrap;
@@ -711,6 +718,22 @@ header > p {
     cursor: ew-resize;
 }
 
+/* ASCII Block */
+.ascii-block {
+    margin: 1.5rem 0;
+    border: var(--border);
+    border-radius: 0.875rem;
+    padding: 1.25rem;
+    background-color: color-mix(in srgb, var(--bg-color) 30%, var(--card-color));
+    text-align: center;
+}
+.ascii-block pre {
+    margin: 0;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    font-family: var(--mono);
+}
+
 /* Code Block */
 .code-block {
     overflow: hidden;
@@ -751,6 +774,21 @@ header > p {
 .string     { color: #98C379; }
 .integer    { color: #D19966; }
 .comment    { color: #7F848E; }
+
+/* Inline code */
+.case-study code {
+    border-radius: 6px;
+    padding: 0.15em 0.4em;
+    background-color: color-mix(in srgb, var(--secondary-text-color) 15%, transparent);
+    font-size: 0.875em;
+    font-family: var(--mono);
+}
+
+/* DORC initials highlight */
+.initial {
+    font-weight: 700;
+    color: var(--primary-text-color);
+}
 
 /* || Aside */
 
@@ -853,6 +891,8 @@ aside p {
 .react::before      { background-color: #0a7ea5; }
 .tailwind::before   { background-color: #00bfff; }
 .node::before       { background-color: #5fa04e; }
+.express::before    { background-color: #888888; }
+.mongodb::before    { background-color: #00ed64; }
 
 /* || Media Queries */
 
