@@ -18,12 +18,11 @@
     --secondary-text-color: #6e6e73;
     --muted-text-color: #86868b;
     --accent-color: #0071e3;
+    --side-quest-color: #ea580c;
     --border-color: rgba(0, 0, 0, 0.08);
     --dark-border-color: rgba(0, 0, 0, 0.14);
     --badge-web-bg-color: #dbeafe;
     --badge-web-text-color: #1d4ed8;
-    --badge-post-bg-color: #ffedd5;
-    --badge-post-text-color: #ea580c;
     --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
     --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.08);
     --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.12);
@@ -40,12 +39,11 @@
         --secondary-text-color: #8b949e;
         --muted-text-color: #6e7681;
         --accent-color: #58a6ff;
+        --side-quest-color: #fb923c;
         --border-color: rgba(255, 255, 255, 0.08);
         --dark-border-color: rgba(255, 255, 255, 0.15);
         --badge-web-bg-color: #1a3a5c;
         --badge-web-text-color: #79b8ff;
-        --badge-post-bg-color: #5b2d12;
-        --badge-post-text-color: #fb923c;
         --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
         --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.4);
         --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.5);
@@ -250,25 +248,36 @@ header > p {
     background-color: var(--accent-color);
 }
 
-.timeline h2 {
+.timeline-quests::after { background-color: var(--side-quest-color);}
+
+.tabs {
     display: flex;
     align-items: center;
     gap: 0.75rem;
     margin-bottom: 0.75rem;
     margin-left: -0.5rem;
-    font-size: 0.75rem;
-    font-weight: 600;
-    font-family: var(--mono);
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    color: var(--secondary-text-color);
 }
-.timeline h2::after {
+.tabs::after {
     content: "";
     flex: 1;
     height: 1px;
     background-color: var(--border-color);
 }
+.tabs button {
+    transition: color 0.15s;
+    border: none;
+    padding: 0;
+    background: none;
+    cursor: pointer;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    font-family: var(--mono);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--muted-text-color);
+}
+.tabs button:hover, .tabs button.active { color: var(--secondary-text-color); }
 
 .timeline section {
     position: relative;
@@ -313,6 +322,10 @@ header > p {
     border-color: var(--bg-color);
     background-color: var(--accent-color);
 }
+.timeline-quests section.in-view .tags::before {
+    box-shadow: 0 0 0 1.5px var(--side-quest-color);
+    background-color: var(--side-quest-color);
+}
 
 .badge {
     display: inline-flex;
@@ -331,7 +344,7 @@ header > p {
     height: 8px;
 }
 .badge-web::before  { background-color: var(--accent-color); }
-.badge-post::before { background-color: var(--badge-post-text-color); }
+.badge-post::before { background-color: var(--side-quest-color); }
 
 .timeline time {
     font-size: 0.8125rem;
@@ -910,8 +923,8 @@ aside p {
         top: 5rem;
         height: fit-content;
     }
-    .timeline { margin-top: calc(0.25rem + 65.5px); }
-    .timeline h2 { gap: 1.5rem; }
+    .tabs { margin-top: calc(4.5rem + 1rem - 0.5625rem); }
+    .timeline { margin-top: 0; }
     .breadcrumbs {
         justify-content: flex-start;
         border-bottom: var(--border);

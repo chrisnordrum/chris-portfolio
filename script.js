@@ -1,38 +1,48 @@
-const timeline = document.querySelector(".timeline");
-const sections = document.querySelectorAll(".timeline section");
+const timelines = document.querySelectorAll(".timeline");
 
 function updateTimeline() {
-    if (!timeline) return;
-
-    const timelineRect = timeline.getBoundingClientRect();
     const windowHeight = window.innerHeight;
 
-    const visible = windowHeight - timelineRect.top;
+    timelines.forEach(timeline => {
+        if (timeline.offsetParent === null) return; // skip the hidden panel
 
-    const progress = Math.max(
-        0,
-        Math.min(visible / timelineRect.height, 1)
-    );
+        const timelineRect = timeline.getBoundingClientRect();
+        const visible = windowHeight - timelineRect.top;
+        const progress = Math.max(0, Math.min(visible / timelineRect.height, 1));
+        timeline.style.setProperty("--scroll-progress", progress);
 
-    timeline.style.setProperty("--scroll-progress", progress);
+        const linePosition = progress * timelineRect.height;
 
-    const linePosition = progress * timelineRect.height;
+        timeline.querySelectorAll("section").forEach(section => {
+            const tags = section.querySelector(".tags");
+            if (!tags) return;
 
-    sections.forEach((section) => {
-        const tags = section.querySelector(".tags");
-        const tagsRect = tags.getBoundingClientRect();
+            const tagsRect = tags.getBoundingClientRect();
+            const dotPosition =
+                (tagsRect.top - timelineRect.top) +
+                (tags.offsetHeight / 2);
 
-        const dotPosition =
-            (tagsRect.top - timelineRect.top) +
-            (tags.offsetHeight / 2);
-
-        if (linePosition >= dotPosition + 40) {
-            section.classList.add("in-view");
-        } else {
-            section.classList.remove("in-view");
-        }
+            section.classList.toggle("in-view", linePosition >= dotPosition + 40);
+        });
     });
 }
+
+const tabButtons = document.querySelectorAll(".tabs button");
+const workTimeline = document.querySelector(".timeline-work");
+const questsTimeline = document.querySelector(".timeline-quests");
+
+tabButtons.forEach(button => {
+    button.addEventListener("click", () => {
+        tabButtons.forEach(btn => btn.classList.remove("active"));
+        button.classList.add("active");
+
+        const showWork = button.dataset.timeline === "work";
+        workTimeline.hidden = !showWork;
+        questsTimeline.hidden = showWork;
+
+        updateTimeline();
+    })
+});
 
 window.addEventListener("scroll", updateTimeline);
 window.addEventListener("resize", updateTimeline);
