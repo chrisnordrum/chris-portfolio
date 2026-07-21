@@ -14,13 +14,13 @@ function updateTimeline() {
         const linePosition = progress * timelineRect.height;
 
         timeline.querySelectorAll("section").forEach(section => {
-            const tags = section.querySelector(".tags");
-            if (!tags) return;
+            const title = section.querySelector("h3");
+            if (!title) return;
 
-            const tagsRect = tags.getBoundingClientRect();
+            const titleRect = title.getBoundingClientRect();
             const dotPosition =
-                (tagsRect.top - timelineRect.top) +
-                (tags.offsetHeight / 2);
+                (titleRect.top - timelineRect.top) +
+                (title.offsetHeight / 2);
 
             section.classList.toggle("in-view", linePosition >= dotPosition + 40);
         });
