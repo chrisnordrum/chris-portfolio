@@ -57,3 +57,15 @@ function moveDivisor() {
 }
 
 if (slider) slider.addEventListener("input", moveDivisor);
+
+const quip = document.querySelector(".quip");
+const quips = [
+    "This one took a side quest and never came back.",
+    "You took a wrong turn. Even my turbo Miata couldn't find this page.",
+    "This route was never committed to main.",
+    "The page you wanted is off getting detailed. Try again later.",
+    "404: my bad, not yours. Probably.",
+    "Dead link. The rest of the site works, I promise."
+];
+
+if (quip) quip.textContent = quips[Math.floor(Math.random() * quips.length)];

@@ -895,6 +895,56 @@ aside p {
 .express::before    { background-color: #888888; }
 .mongodb::before    { background-color: #00ed64; }
 
+/* || 404 Page */
+
+body.error-layout {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    min-height: 100vh;
+    max-width: 40rem;
+    text-align: center;
+}
+
+.error-code {
+    margin: 0;
+    font-size: clamp(6rem, 22vw, 11rem);
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.04em;
+    background: linear-gradient(180deg, var(--primary-text-color), var(--muted-text-color));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.quip {
+    margin: 0;
+    font-size: 1.0625rem;
+    color: var(--secondary-text-color);
+}
+
+.home-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    border-radius: 999px;
+    padding: 0.5rem 1.25rem;
+    background-color: var(--accent-color);
+    font-family: var(--mono);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: #fff;
+    transition: background-color 0.15s, transform 0.15s;
+}
+
+.home-btn:hover {
+    transform: translateY(-1px);
+    background-color: color-mix(in srgb, var(--accent-color) 85%, black);
+}
+
 /* || Media Queries */
 
 @media screen and (min-width: 980px) {
