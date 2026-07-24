@@ -84,35 +84,35 @@ MongoDB</pre>
             <p>A custom <code>useAuthFetch</code> hook ties the flow together: when a request returns <code>401</code>, it silently asks the server for a new access token, retries once, and only logs the user out if the refresh itself fails. On the client I also gated protected pages behind a <code>ProtectedRoute</code> component; the admin dashboard is hidden and blocked from anyone without the admin role, backed by role checks on the server so the frontend can't be bypassed.</p>
             <div class="code-block">
                 <span class="code-lang">JS</span>
-<pre>export function useAuthFetch() {
-  const { token, refresh, logout } = useAuth();
+<pre><span class="declarator">export function</span> <span class="function">useAuthFetch</span>() {
+  <span class="declarator">const</span> { <span class="const">token</span>, <span class="const">refresh</span>, <span class="const">logout</span> } <span class="operator">=</span> <span class="function">useAuth</span>();
 
-  const authFetch = async (url, options = {}) => {
-    let res = await fetch(url, {
-      ...options,
-      credentials: "include",
-      headers: { ...options.headers, token },
+  <span class="declarator">const</span> <span class="const">authFetch</span> <span class="operator">=</span> <span class="declarator">async</span> (<span class="const">url</span>, <span class="const">options</span> <span class="operator">=</span> {}) <span class="declarator">=></span> {
+    <span class="declarator">let</span> <span class="const">res</span> <span class="operator">=</span> <span class="declarator">await</span> <span class="function">fetch</span>(<span class="const">url</span>, {
+      ...<span class="const">options</span>,
+      <span class="var">credentials</span>: <span class="string">"include"</span>,
+      <span class="var">headers</span>: { ...<span class="const">options</span>.<span class="var">headers</span>, <span class="const">token</span> },
     });
 
-    // Access token expired — refresh once, then retry
-    if (res.status === 401) {
-      try {
-        const newToken = await refresh();
-        res = await fetch(url, {
-          ...options,
-          credentials: "include",
-          headers: { ...options.headers, token: newToken },
+    <span class="comment">// Access token expired — refresh once, then retry</span>
+    <span class="declarator">if</span> (<span class="const">res</span>.<span class="var">status</span> <span class="operator">===</span> <span class="integer">401</span>) {
+      <span class="declarator">try</span> {
+        <span class="declarator">const</span> <span class="const">newToken</span> <span class="operator">=</span> <span class="declarator">await</span> <span class="function">refresh</span>();
+        <span class="const">res</span> <span class="operator">=</span> <span class="declarator">await</span> <span class="function">fetch</span>(<span class="const">url</span>, {
+          ...<span class="const">options</span>,
+          <span class="var">credentials</span>: <span class="string">"include"</span>,
+          <span class="var">headers</span>: { ...<span class="const">options</span>.<span class="var">headers</span>, <span class="var">token</span>: <span class="const">newToken</span> },
         });
-      } catch {
-        await logout();
-        throw new Error("Session expired");
+      } <span class="declarator">catch</span> {
+        <span class="declarator">await</span> <span class="function">logout</span>();
+        <span class="declarator">throw new</span> <span class="function">Error</span>(<span class="string">"Session expired"</span>);
       }
     }
 
-    return res;
+    <span class="declarator">return</span> <span class="const">res</span>;
   };
 
-  return authFetch;
+  <span class="declarator">return</span> <span class="const">authFetch</span>;
 }</pre>
             </div>
         </section>

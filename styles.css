@@ -847,6 +847,9 @@ aside p {
     max-width: 1.75rem;
 }
 
+.contributors .name { font-weight: 600; }
+.contributors .role { color: var(--muted-text-color); }
+
 /* Languages */
 .languages {
     display: flex;
