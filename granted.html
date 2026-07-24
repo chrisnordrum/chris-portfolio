@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chris Nordrum | Granted</title>
+
+    <meta name="description" content="Case study: Granted, an award-winning scholarship-matching platform. The back-end behind its deadline reminder system — scheduled notifications, native desktop alerts, and profile-aware matching in PHP and MySQL.">
+    <link rel="canonical" href="https://chrisnordrum.com/granted">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Granted — Case Study">
+    <meta property="og:description" content="Case study: Granted, an award-winning scholarship-matching platform. The back-end behind its deadline reminder system — scheduled notifications, native desktop alerts, and profile-aware matching in PHP and MySQL.">
+    <meta property="og:url" content="https://chrisnordrum.com/granted">
+    <meta property="og:image" content="https://chrisnordrum.com/images/og-image.png">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://chrisnordrum.com/images/og-image.png">
+
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+    <link rel="preload" href="fonts/InterVariable.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="fonts/GeistMonoVariable.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="case-study-layout">
+    <nav class="breadcrumbs">
+        <a href="./" class="link">
+            <img src="images/chris-nordrum-profile.webp" alt="Chris Nordrum smiling in a light blue button-up shirt">
+            <span>chrisnordrum</span>
+        </a>
+        <span>/</span>
+        <span>granted</span>
+    </nav>
+    <main class="case-study">
+        <span class="case-study-header">CASESTUDY.md</span>
+        <h1>Granted</h1>
+
+        <h2>Overview</h2>
+        <p>Granted is a scholarship search and matching platform for Alberta students, built to fix a real problem: more than $20 million in scholarships goes unclaimed every year, largely because the process of finding and tracking them is scattered and overwhelming. It launched publicly at SAIT's Capstone Convention and <strong>won Best Capstone Project at the SAIT Ignite Awards, judged across multiple programs.</strong></p>
+        <p>Granted was a two-semester, six-person capstone. I joined in the second semester on the <strong>back-end</strong>, where I owned the systems that keep students on top of deadlines — a deadline-aware notification engine, profile-aware matching signals, and application tracking, all in PHP and MySQL.</p>
+
+        <a href="./demos/granted/" target="_blank" rel="noopener noreferrer" class="browser-window">
+            <div class="title-bar">
+                <div class="browser-dots">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                <span class="url">//granted</span>
+            </div>
+            <picture>
+                <source srcset="images/my-work/granted-mobile.webp" media="(max-width: 720px)">
+                <img src="images/my-work/granted-screenshot.webp" alt="Granted screenshot">
+            </picture>
+        </a>
+
+        <h2>The Challenge</h2>
+        <p>Finding a scholarship is only half the battle — the other half is not letting it slip by. Deadlines are the moment students actually miss out, so saving a scholarship needed to mean more than adding it to a list. It had to quietly set up a plan to bring the student back before each deadline.</p>
+        <p>On the back-end, that meant turning a static "saved scholarships" list into an active system: schedule the right reminders for the right dates, deliver them where students would actually see them, keep matches relevant to each student's profile, and rebuild all of it cleanly whenever someone changed their mind.</p>
+
+        <h2>The Process</h2>
+
+        <section>
+            <h3>Deadline-Aware Notification Scheduling</h3>
+            <p>Students choose how far ahead they want reminders — a month, a week, and/or three days before a deadline. When someone saves a scholarship (or updates their preferences), the back-end works backward from that scholarship's deadline and schedules a reminder for each lead time they picked, storing one row per reminder in a <code>notifications</code> table. Only scholarships with a real, future deadline get scheduled.</p>
+            <div class="code-block">
+                <span class="code-lang">PHP</span>
+<pre><span class="const">$insert_query</span> <span class="operator">=</span> <span class="string">"
+    INSERT INTO notifications (
+        user_id,
+        scholarship_id,
+        unread,
+        lead_time,
+        notification_date
+    )
+    VALUES (?, ?, ?, ?, ?)
+"</span>;
+<span class="const">$insert_stmt</span> <span class="operator">=</span> <span class="function">mysqli_prepare</span>(<span class="const">$connection</span>, <span class="const">$insert_query</span>);
+
+<span class="declarator">foreach</span> (<span class="const">$frequencies</span> <span class="declarator">as</span> <span class="const">$frequency</span>) {
+    <span class="const">$notification_date</span> <span class="operator">=</span> <span class="declarator">null</span>;
+
+    <span class="declarator">if</span> (<span class="const">$frequency</span> <span class="operator">===</span> <span class="string">"3 days"</span>) {
+        <span class="const">$notification_date</span> <span class="operator">=</span> <span class="function">date</span>(<span class="string">'Y-m-d'</span>, <span class="function">strtotime</span>(<span class="const">$deadline</span> <span class="operator">.</span> <span class="string">' -3 days'</span>));
+    } <span class="declarator">elseif</span> (<span class="const">$frequency</span> <span class="operator">===</span> <span class="string">"1 week"</span>) {
+        <span class="const">$notification_date</span> <span class="operator">=</span> <span class="function">date</span>(<span class="string">'Y-m-d'</span>, <span class="function">strtotime</span>(<span class="const">$deadline</span> <span class="operator">.</span> <span class="string">' -1 week'</span>));
+    } <span class="declarator">elseif</span> (<span class="const">$frequency</span> <span class="operator">===</span> <span class="string">"1 month"</span>) {
+        <span class="const">$notification_date</span> <span class="operator">=</span> <span class="function">date</span>(<span class="string">'Y-m-d'</span>, <span class="function">strtotime</span>(<span class="const">$deadline</span> <span class="operator">.</span> <span class="string">' -1 month'</span>));
+    }
+
+    <span class="declarator">if</span> (<span class="const">$notification_date</span> <span class="operator">!==</span> <span class="declarator">null</span>) {
+        <span class="const">$unread</span> <span class="operator">=</span> <span class="integer">1</span>;
+
+        <span class="function">mysqli_stmt_bind_param</span>(
+            <span class="const">$insert_stmt</span>,
+            <span class="string">"iiiss"</span>,
+            <span class="const">$user_id</span>,
+            <span class="const">$scholarship_id</span>,
+            <span class="const">$unread</span>,
+            <span class="const">$frequency</span>,
+            <span class="const">$notification_date</span>
+        );
+
+        <span class="function">mysqli_stmt_execute</span>(<span class="const">$insert_stmt</span>);
+    }
+}</pre>
+            </div>
+            <p>Because reminders are derived data, changing preferences can't just add more rows. Updating notification settings first <strong>deletes</strong> the user's existing reminders (joined through their saved scholarships) and then regenerates the whole schedule from scratch — so the reminders always match the current settings, with no stale duplicates. Unsaving a scholarship removes its reminders, and a cleanup query clears out notifications whose deadlines have already passed.</p>
+        </section>
+
+        <section>
+            <h3>Native Desktop Notifications</h3>
+            <p>In-app reminders only work if students open the app, so I added real desktop notifications through the browser's Notification API. When a student opts in, the client requests permission at the right moment and handles every permission state — granted, denied, or not-yet-asked — gracefully. Due reminders then fire as native OS notifications, deduplicated with <code>sessionStorage</code> so the same alert never shows twice, and clicking one jumps straight to the scholarship and marks it read.</p>
+            <div class="code-block">
+                <span class="code-lang">JS</span>
+<pre><span class="const">dueNotifications</span>.<span class="function">forEach</span>((<span class="const">notification</span>, <span class="const">index</span>) <span class="declarator">=></span> {
+  <span class="declarator">const</span> <span class="const">storageKey</span> <span class="operator">=</span> <span class="string">`desktop-notification-shown-</span><span class="declarator">${</span><span class="const">notification</span>.<span class="var">notification_id</span><span class="declarator">}</span><span class="string">`</span>;
+
+  <span class="declarator">if</span> (<span class="const">sessionStorage</span>.<span class="function">getItem</span>(<span class="const">storageKey</span>)) <span class="declarator">return</span>;
+
+  <span class="function">setTimeout</span>(() <span class="declarator">=></span> {
+    <span class="declarator">const</span> <span class="const">notif</span> <span class="operator">=</span> <span class="declarator">new</span> <span class="function">Notification</span>(<span class="string">"Granted"</span>, {
+      <span class="var">body</span>: <span class="string">`</span><span class="declarator">${</span><span class="const">notification</span>.<span class="var">name</span> <span class="operator">||</span> <span class="string">"A scholarship"</span><span class="declarator">}</span><span class="string"> closes in </span><span class="declarator">${</span><span class="const">notification</span>.<span class="var">lead_time</span><span class="declarator">}</span><span class="string">. If you are applying, this is a good time to review the details.`</span>,
+      <span class="var">tag</span>: <span class="string">`notification-</span><span class="declarator">${</span><span class="const">notification</span>.<span class="var">notification_id</span><span class="declarator">}</span><span class="string">`</span>,
+      <span class="var">icon</span>: <span class="string">`</span><span class="declarator">${</span><span class="const">window</span>.<span class="var">location</span>.<span class="var">origin</span><span class="declarator">}</span><span class="string">/grantedv3/images/favicon.ico`</span>
+    });
+
+    <span class="const">sessionStorage</span>.<span class="function">setItem</span>(<span class="const">storageKey</span>, <span class="string">"1"</span>);
+
+    <span class="const">notif</span>.<span class="var">onclick</span> <span class="operator">=</span> (<span class="const">e</span>) <span class="declarator">=></span> {
+      <span class="const">e</span>.<span class="function">preventDefault</span>();
+      <span class="const">notif</span>.<span class="function">close</span>();
+
+      <span class="const">window</span>.<span class="function">focus</span>();
+      <span class="const">window</span>.<span class="var">location</span>.<span class="var">href</span> <span class="operator">=</span> <span class="string">`scholarships.php?scholarship_id=</span><span class="declarator">${</span><span class="const">notification</span>.<span class="var">scholarship_id</span><span class="declarator">}</span><span class="string">&amp;mark_read=1`</span>;
+    };
+  }, <span class="const">index</span> <span class="operator">*</span> <span class="integer">300</span>);
+});</pre>
+            </div>
+        </section>
+
+        <section>
+            <h3>Profile-Aware Matching Signals</h3>
+            <p>Matches are only as good as what the platform knows about a student, so the browse page adapts to how complete their profile is. Rather than tracking completeness as a separate flag that could drift out of sync, I measured it directly from the source of truth with a single query that counts the empty profile fields.</p>
+            <div class="code-block">
+                <span class="code-lang">PHP</span>
+<pre><span class="const">$progressquery</span> <span class="operator">=</span> <span class="string">"
+    SELECT
+        (CASE WHEN first_name IS NULL OR first_name = '' THEN 1 ELSE 0 END) +
+        (CASE WHEN email IS NULL OR email = '' THEN 1 ELSE 0 END) +
+        (CASE WHEN password IS NULL OR password = '' THEN 1 ELSE 0 END) +
+        (CASE WHEN date_of_birth IS NULL THEN 1 ELSE 0 END) +
+        (CASE WHEN student_status IS NULL OR student_status = '' THEN 1 ELSE 0 END) +
+        (CASE WHEN current_institution IS NULL OR current_institution = '' THEN 1 ELSE 0 END) +
+        (CASE WHEN level_of_study IS NULL OR level_of_study = '' THEN 1 ELSE 0 END) +
+        (CASE WHEN program IS NULL OR program = '' THEN 1 ELSE 0 END) +
+        (CASE WHEN year_of_study IS NULL THEN 1 ELSE 0 END) +
+        (CASE WHEN enrollment_status IS NULL OR enrollment_status = '' THEN 1 ELSE 0 END)
+    AS NullColumnCount
+    FROM users
+    WHERE user_id = $current_user_id
+"</span>;
+
+<span class="const">$progressresult</span> <span class="operator">=</span> <span class="function">mysqli_query</span>(<span class="const">$connection</span>, <span class="const">$progressquery</span>);
+
+<span class="declarator">if</span> (<span class="const">$progressrow</span> <span class="operator">=</span> <span class="function">mysqli_fetch_assoc</span>(<span class="const">$progressresult</span>)) {
+    <span class="const">$is_profile_complete</span> <span class="operator">=</span> (<span class="const">$progressrow</span>[<span class="string">'NullColumnCount'</span>] <span class="operator">==</span> <span class="integer">0</span>);
+}</pre>
+            </div>
+            <p>When the profile is complete, browse promises "the strongest matches based on your profile"; when it isn't, it nudges the student to fill in the gaps for better results — turning a data problem into a gentle prompt.</p>
+        </section>
+
+        <section>
+            <h3>Application Tracking &amp; Analytics</h3>
+            <p>Two smaller pieces closed the loop. Students can mark a scholarship as applied, which the back-end tracks as a status on their saved record (inserting or updating as needed). And every "Apply" click routes through a counter that increments the scholarship's tally before redirecting out to the external application — giving the team a simple, reliable read on which scholarships actually drive interest.</p>
+            <div class="code-block">
+                <span class="code-lang">PHP</span>
+<pre><span class="comment">// Increment the counter</span>
+<span class="const">$update</span> <span class="operator">=</span> <span class="const">$connection</span><span class="operator">-></span><span class="function">prepare</span>(<span class="string">"UPDATE scholarships SET click_counter = click_counter + 1 WHERE scholarships.scholarship_id = ?"</span>);
+<span class="const">$update</span><span class="operator">-></span><span class="function">bind_param</span>(<span class="string">"i"</span>, <span class="const">$id</span>);
+<span class="const">$update</span><span class="operator">-></span><span class="function">execute</span>();
+
+<span class="comment">// Redirect to the external site</span>
+<span class="function">header</span>(<span class="string">"Location: "</span> <span class="operator">.</span> <span class="const">$apply_link</span>);
+<span class="declarator">exit</span>;</pre>
+            </div>
+        </section>
+
+        <h2>The Solution</h2>
+        <p>The result is a back-end that makes saving a scholarship an active commitment: reminders scheduled around every deadline, delivered even when the app is closed, kept in sync as students change their minds, and paired with matching that sharpens as a profile fills in. Granted launched at CapCon and took home Best Capstone at the Ignite Awards.</p>
+        <ul class="results">
+            <li>
+                <strong>Best Capstone</strong>
+                Won at SAIT's Ignite Awards, judged across programs
+            </li>
+            <li>
+                <strong>3 lead times</strong>
+                Reminders 1 month, 1 week, and 3 days before each deadline
+            </li>
+            <li>
+                <strong>Web Notifications</strong>
+                Native desktop alerts via the browser Notification API
+            </li>
+        </ul>
+    </main>
+    <aside>
+        <h2>About</h2>
+        <p>Back-end on Granted, an award-winning scholarship-matching platform: deadline reminders, desktop notifications, and profile-aware matching.</p>
+
+        <h2>Releases</h2>
+        <ul class="releases">
+            <li><a href="./demos/granted/" class="link" target="_blank" rel="noopener noreferrer">/demos/granted/</a></li>
+        </ul>
+
+        <h2>Team</h2>
+        <ul class="contributors">
+            <li><img src="images/avatars/granted-ivy.webp" alt="Ivy Porras"><span class="name">Ivy Porras</span> <span class="role">Product / UI Lead</span></li>
+            <li><img src="images/avatars/granted-kevin.webp" alt="Kevin Mai"><span class="name">Kevin Mai</span> <span class="role">Graphic Lead</span></li>
+            <li><img src="images/avatars/granted-michelle.webp" alt="Michelle Babani"><span class="name">Michelle Babani</span> <span class="role">Marketing</span></li>
+            <li><img src="images/avatars/granted-mharvic.webp" alt="Mharvic Inocentes"><span class="name">Mharvic Inocentes</span> <span class="role">Web Dev Lead</span></li>
+            <li><img src="images/avatars/granted-diane.webp" alt="Diane Schultze"><span class="name">Diane Schultze</span> <span class="role">Front-end</span></li>
+            <li><img src="images/avatars/granted-chris.webp" alt="Chris Nordrum"><span class="name">Chris Nordrum</span> <span class="role">Back-end</span></li>
+        </ul>
+
+        <h2>Languages</h2>
+        <ul class="languages">
+            <li class="php">PHP</li>
+            <li class="mysql">MySQL</li>
+            <li class="javascript">JavaScript</li>
+            <li class="css">CSS</li>
+            <li class="html">HTML</li>
+        </ul>
+    </aside>
+</body>
+</html>
