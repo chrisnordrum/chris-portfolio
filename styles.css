@@ -71,6 +71,8 @@ body {
 
 main { max-width: 100ch; }
 
+body.case-study-layout { padding: 1rem; }
+
 img, video {
     display: block;
     max-width: 100%;
@@ -403,6 +405,13 @@ header > p {
 
 /* Desktop */
 @media screen and (min-width:720px) {
+    body.case-study-layout { padding: 2rem; }
+    .case-study { padding: 2rem; }
+    .case-study-header {
+        margin: -2rem -2rem 1.75rem;
+        width: calc(100% + 4rem);
+    }
+
     .browser-window {
         box-shadow: var(--shadow-lg);
         border: var(--border);
@@ -573,16 +582,16 @@ header > p {
     border: 1px solid var(--dark-border-color);
     border-radius: 1.25rem;
     max-width: 80ch;
-    padding: 2rem;
+    padding: 1.5rem;
     background: var(--card-color);
 }
 
 .case-study-header {
     display: block;
-    margin: -2rem -2rem 1.75rem;
+    margin: -1.5rem -1.5rem 1.5rem;
     border-bottom: var(--border);
     border-radius: 1.25rem 1.25rem 0 0;
-    width: calc(100% + 4rem);
+    width: calc(100% + 3rem);
     padding: 0.625rem 1.5rem;
     background: color-mix(in srgb, var(--bg-color) 40%, var(--card-color));
     font-size: 0.8125rem;
